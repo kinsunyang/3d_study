@@ -6,6 +6,9 @@
 PlatformData g_platData;
 LogFile g_log;
 bool g_exit = false;
+extern void _main_(void);
+extern void _update_(void);
+
 // 此代码模块中包含的函数的前向声明:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int, int);
@@ -27,6 +30,7 @@ int main()
 		return FALSE;
 	}
 
+	_main_();
 	// 主消息循环:
 	while (true)
 	{
@@ -39,6 +43,7 @@ int main()
 		{
 			if(g_exit)
 				break;
+			_update_();
 		}
 	}
 
