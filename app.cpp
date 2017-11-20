@@ -18,8 +18,9 @@ BaseApp::~BaseApp()
 	delete m_renderer;
 }
 
-void BaseApp::update()
+void BaseApp::render()
 {
+	m_renderer->render();
 	commit();
 }
 void BaseApp::commit()

@@ -7,12 +7,16 @@ class BaseApp
 {
 public:
 	BaseApp(RENDERER_TYPE type);
+	// init
 	virtual void run() = 0;
-	virtual void update();
+	// logic frame
+	virtual void update() = 0;
+	// render frame
+	virtual void render();
 	~BaseApp();
 private:
 	void commit();
-private:
+protected:
 	Renderer * m_renderer;	
 };
 
@@ -26,6 +30,10 @@ private:
 	void _update_()	\
 	{\
 		app->update();	\
+	}	\
+	void _render_()	\
+	{\
+		app->render();	\
 	}
 	
 #endif

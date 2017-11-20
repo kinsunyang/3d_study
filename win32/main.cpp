@@ -8,6 +8,7 @@ LogFile g_log;
 bool g_exit = false;
 extern void _main_(void);
 extern void _update_(void);
+extern void _render_(void);
 
 // 此代码模块中包含的函数的前向声明:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
@@ -44,6 +45,7 @@ int main()
 			if(g_exit)
 				break;
 			_update_();
+			_render_();
 		}
 	}
 

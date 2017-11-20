@@ -7,7 +7,9 @@ message(STATUS ${CMAKE_SYSTEM_NAME})
 
 include_directories(${PROJECT_SOURCE_DIR})
 set(SRC common/log.cpp	\ 
+	common/utils.cpp	\ 
 	renderer.cpp	\ 	
+	command_buffer.cpp	\ 
 	app.cpp	
 	)
 set(OPENGL opengl/gl_device_context.cpp \ 

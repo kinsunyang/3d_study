@@ -16,6 +16,10 @@ public:
 	{
 		g_log.debug("start app");
 	}
+	virtual void update()
+	{
+		m_renderer->clear(CLEAR_TYPE::CLEAR_TYPE_COLOR, 255, 0, 0, 255, 0, 0);
+	}
 private:
 
 };
