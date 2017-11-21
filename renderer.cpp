@@ -21,11 +21,11 @@ void Renderer::clear(unsigned int flag, unsigned char r, unsigned char g, unsign
 
 void Renderer::render()
 {
-	std::vector<CommandBase *>::const_iterator it = m_cmdBuffer->m_buffer.begin();
-	while(it != m_cmdBuffer->m_buffer.end())
+	int index = 0;
+	while(index != m_cmdBuffer->m_tail)
 	{
-		(*it)->execute(this);
-		it++;
+		m_cmdBuffer->m_buffer[index]->execute(this);
+		index++;
 	}
 
 	m_cmdBuffer->clear();

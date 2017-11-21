@@ -3,10 +3,12 @@
 
 #include "renderer.h"
 #include "common/utils.h"
-#include <vector>
+#include <map>
 
 enum COMMAND_TYPE {
+	COMMAND_BEGIN = 1,
 	COMMAND_CLEAR = 1,
+	COMMAND_END,
 };
 class Renderer;
 class CommandBase
@@ -54,13 +56,80 @@ private:
 	unsigned int m_stencil;
 };
 
+class CommandAllocatorBase
+{
+public :
+	CommandAllocatorBase() : m_tail(0)
+	{
+	}
+	void clear()
+	{
+		m_tail = 0;
+	}
+protected:
+	int m_tail;
+};
+template<class T>
+class CommandAllocator : public CommandAllocatorBase
+{
+public:
+	CommandAllocator()
+	{
+		m_buffer = new T * [8];
+		m_capacity = 8;
+		memset(m_buffer, 0, sizeof(m_buffer));
+		m_size = 0;
+	}
+	~CommandAllocator()
+	{
+		int index = 0;
+		while(index != m_size)
+		{
+			delete m_buffer[index];
+			index++;
+		}
+
+		delete [] m_buffer;
+	}
+
+	T * get()
+	{
+		T * cmd = m_buffer[m_tail];
+		if(!cmd)
+		{
+			if(m_size == m_capacity)
+			{
+				int old_capacity = m_capacity;
+				m_capacity *= 2;
+				T ** tmp = new T * [m_capacity];
+				memcpy(tmp, m_buffer, old_capacity);
+				delete[] m_buffer;
+				m_buffer = tmp;
+			}
+			cmd = new T();
+			m_buffer[m_tail] = cmd;
+			m_tail++;
+			m_size++;
+		}
+		return cmd;
+	}
+private :
+	T ** m_buffer;
+	int m_size;
+	int m_capacity;
+};
 class CommandBuffer
 {
 public:
+	CommandBuffer();
+	~CommandBuffer();
 	CommandBase * getCommand(COMMAND_TYPE type);
 	friend class Renderer;
-	void clear() {m_buffer.clear();}
+	void clear() ;
 private:
-	std::vector<CommandBase *> m_buffer;
+	CommandBase ** m_buffer;
+	CommandAllocatorBase * m_alloc[COMMAND_END];
+	const int m_size;
+	int m_tail;
 };
 #endif
